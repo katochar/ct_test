@@ -1,26 +1,36 @@
 #include "ct_test.h"
 
-#include "ct_test_unite_begin.h"
+CT_TEST_CASE_BLOCK_BEGIN()
 
-CT_TEST_CASE(t1)
+CT_TEST_T(hoge)
 {
-    puts("testcase1");
+    puts(CT_TEST_I_STZ_(hoge));
 }
-#undef CT_TEST_CASE_C
-#define CT_TEST_CASE_C CT_TEST_CASE_NEXT(t1)
-
-CT_TEST_CASE(t2)
+CT_TEST_T(hage)
 {
-    puts("testcase2");
+    puts(CT_TEST_I_STZ_(hage));
 }
-#undef CT_TEST_CASE_C
-#define CT_TEST_CASE_C CT_TEST_CASE_NEXT(t2)
+CT_TEST_T(huge)
+{
+    puts(CT_TEST_I_STZ_(huge));
+}
+CT_TEST_CASE()
+{
+    CT_TEST_C(hoge);
+    CT_TEST_C(hage);
+    CT_TEST_C(huge);
+}
 
-#include "ct_test_unite_end.h"
+CT_TEST_I_CASE(sample)
+{
+    puts("sample test");
+}
 
+CT_TEST_CASE_BLOCK_END()
 
 int main(int argc, char* argv[])
 {
     CT_TEST_SUITE_REGISTER();
+    CT_TEST_SUITE_REGISTER_I(sample);
     return ct_test_suite_run(argc, argv);
 }

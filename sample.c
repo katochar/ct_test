@@ -4,15 +4,15 @@ CT_TEST_CASE_BLOCK_BEGIN()
 
 CT_TEST_T(hoge)
 {
-    puts(CT_TEST_I_STZ_(hoge));
+    puts("hoge");
 }
 CT_TEST_T(hage)
 {
-    puts(CT_TEST_I_STZ_(hage));
+    puts("hage");
 }
 CT_TEST_T(huge)
 {
-    puts(CT_TEST_I_STZ_(huge));
+    puts("huge");
 }
 CT_TEST_CASE()
 {

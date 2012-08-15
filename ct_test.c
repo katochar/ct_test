@@ -19,7 +19,7 @@ int ct_test_suite_run(int argc, char* argv[])
     int ntc = 0;
 
     while(tc != NULL){
-        printf("%s:\n", tc->name);
+        printf("%s(%d):%s\n", tc->meta_.fn, tc->meta_.ln, tc->name);
         if(tc->entry != NULL){
             tc->entry();
             ++ntc;

@@ -8,6 +8,10 @@
 
 typedef struct ct_test_i_case_
 {
+    struct{
+        const char*   fn;
+        unsigned long ln;
+    }           meta_;
     const char* name;
     void        (*entry)(void);
     struct{
@@ -23,6 +27,7 @@ typedef struct ct_test_i_suite_
 #define CT_TEST_I_CASE(NAME_)                            \
     static void CT_TEST_I_TEST_NMZ(NAME_)(void);         \
     static ct_test_i_case_ CT_TEST_I_CASE_NMZ(NAME_) = { \
+        { __FILE__, __LINE__ },                          \
         CT_TEST_I_STZ_(NAME_),                           \
         CT_TEST_I_TEST_NMZ(NAME_),                       \
         { ((void*)0) } };                                \

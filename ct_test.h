@@ -3,7 +3,7 @@
 
 #include "ct_test_i.h"
 
-#define CT_TEST_CFG_NONAME dflt
+#define CT_TEST_CFG_NONAME noname
 
 #define CT_TEST_CASE_BLOCK_BEGIN()
 #define CT_TEST_CASE_BLOCK_END()

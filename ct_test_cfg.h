@@ -5,7 +5,7 @@
 #define CT_TEST_CFG_NDEBUG
 #endif
 
-#define CT_TEST_CFG_NONAME noname
+#define CT_TEST_CFG_NONAME /*ct_test_*/noname
 
 #endif /* CT_TEST_CFG_H */
 /*EOF*/

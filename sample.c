@@ -21,7 +21,7 @@ CT_TEST_CASE()
     CT_TEST_C(huge);
 }
 
-CT_TEST_I_CASE(sample)
+CT_TEST_CASE_I(sample)
 {
     puts("sample test");
 }
@@ -32,5 +32,5 @@ int main(int argc, char* argv[])
 {
     CT_TEST_SUITE_REGISTER();
     CT_TEST_SUITE_REGISTER_I(sample);
-    return ct_test_suite_run(argc, argv);
+    return CT_TEST_SUITE_RUN(argc, argv);
 }

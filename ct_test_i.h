@@ -1,11 +1,16 @@
 #ifndef CT_TEST_I_H
 #define CT_TEST_I_H
 
+#include "ct_test_cfg.h"
+
 #define CT_TEST_I_CAT_(A_,B_) A_##B_
 #define CT_TEST_I_STZ_(A_) #A_
-#define CT_TEST_I_IMPL_NMZ(NAME_) CT_TEST_I_CAT_(ct_test_case_impl_, NAME_)
-#define CT_TEST_I_CASE_NMZ(NAME_) CT_TEST_I_CAT_(ct_test_case_, NAME_)
-#define CT_TEST_I_TEST_NMZ(NAME_) CT_TEST_I_CAT_(ct_test_, NAME_)
+#define CT_TEST_I_IMPL_NMZ(NAME_) CT_TEST_I_CAT_( \
+    CT_TEST_CFG_PREFIX_IMPL, NAME_)
+#define CT_TEST_I_CASE_NMZ(NAME_) CT_TEST_I_CAT_( \
+    CT_TEST_CFG_PREFIX_CASE, NAME_)
+#define CT_TEST_I_TEST_NMZ(NAME_) CT_TEST_I_CAT_( \
+    CT_TEST_CFG_PREFIX_TEST, NAME_)
 
 typedef struct ct_test_i_case_impl_
 {

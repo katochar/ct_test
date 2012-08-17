@@ -8,8 +8,10 @@ ct_test_i_suite_ ct_test_suite_global = {NULL};
 ct_test_i_case_*
 ct_test_suite_Join(ct_test_i_suite_* suite, ct_test_i_case_* ii)
 {
-    ii->list_.next_ = suite->root;
-    suite->root = ii;
+    if(ii->list_.next_ == NULL){
+        ii->list_.next_ = suite->root;
+        suite->root = ii;
+    }
     return ii;
 }
 

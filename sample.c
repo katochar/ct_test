@@ -30,7 +30,7 @@ CT_TEST_CASE_BLOCK_END()
 
 int main(int argc, char* argv[])
 {
-    CT_TEST_SUITE_REGISTER();
-    CT_TEST_SUITE_REGISTER_I(sample);
+    CT_TEST_SUITE_JOIN();
+    CT_TEST_SUITE_JOIN_I(sample);
     return CT_TEST_SUITE_RUN(argc, argv);
 }

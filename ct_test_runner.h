@@ -43,7 +43,7 @@ typedef struct ct_test_runner_
 
 /*! setup log @todo parse_opt */
 static ct_test_runner_*
-ct_test_runner_build(ct_test_runner_* tr,
+ct_test_runner_Build(ct_test_runner_* tr,
     void* const buf, unsigned long const bufn,
     const int argc, const char* argv[])
 {

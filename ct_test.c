@@ -6,7 +6,7 @@ ct_test_i_suite_ ct_test_suite_global = {NULL};
 
 /* push front */
 ct_test_i_case_*
-ct_test_suite_register(ct_test_i_suite_* suite, ct_test_i_case_* ii)
+ct_test_suite_Join(ct_test_i_suite_* suite, ct_test_i_case_* ii)
 {
     ii->list_.next_ = suite->root;
     suite->root = ii;
@@ -15,7 +15,7 @@ ct_test_suite_register(ct_test_i_suite_* suite, ct_test_i_case_* ii)
 
 /* each(testcase in suite){ run testcase }  */
 int
-ct_test_suite_run(const ct_test_i_suite_* suite, int argc, char* argv[])
+ct_test_suite_Run(const ct_test_i_suite_* suite, int argc, char* argv[])
 {
     const ct_test_i_case_* ii = suite->root;
     int ntc = 0;

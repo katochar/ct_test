@@ -55,7 +55,6 @@ int main(int argc, char* argv[])
 
     result = CT_TEST_RUN(ct_test_runner_Build(&tr,
         bufff, sizeof(bufff), parse_opt(&tro, argc, argv)));
-    printf("%s", bufff);
-    printf("%d test.", tr.score.n);
+    puts(bufff);
     return result;
 }

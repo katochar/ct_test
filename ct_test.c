@@ -39,6 +39,35 @@ ct_test_runner_Log(ct_test_runner* tr, ct_test_runner_lv lv,
     }
     return tr;
 }
+//! output score
+static ct_test_runner*
+ct_test_runner_Report(ct_test_runner* tr,
+    const char* msg, const ct_test_result* sc)
+{
+    if(tr != NULL && sc != NULL){
+        char*             wp  = tr->log.wp;
+        const char* const wq  = tr->log.wq;
+        if(msg != NULL){
+            wp = ct_test_i_StrLCpy(wp, wq, "'");
+            wp = ct_test_i_StrLCpy(wp, wq, msg);
+            wp = ct_test_i_StrLCpy(wp, wq, "' ");
+        }
+        wp = ct_test_i_StrLCpy(wp, wq, (sc->require != 0)
+            ? "aborted. "
+            : "completed. ");
+        wp = ct_test_i_FormatDec(wp, wq, sc->n);
+        wp = ct_test_i_StrLCpy(wp, wq, " tests, ");
+        wp = ct_test_i_FormatDec(wp, wq, sc->expr);
+        wp = ct_test_i_StrLCpy(wp, wq, " clear, ");
+        wp = ct_test_i_FormatDec(wp, wq, sc->warn);
+        wp = ct_test_i_StrLCpy(wp, wq, " warning, ");
+        wp = ct_test_i_FormatDec(wp, wq, sc->check + sc->require);
+        wp = ct_test_i_StrLCpy(wp, wq, " error.");
+        wp = ct_test_i_StrLCpy(wp, wq, CT_TEST_CFG_EOL);
+    }
+    return tr;
+}
+
 /*! initialize dynamic data */
 static ct_test_runner*
 ct_test_runner_Clear(ct_test_runner* tr)
@@ -75,31 +104,40 @@ ct_test_runner_Build(ct_test_runner* tr,
     return tr;
 }
 
-void ct_test_tool_Warn(
+void ct_test_tool_Warn(int f,
     const char* flags, const char* fn, const unsigned long ln)
 {
     ct_test_runner* tr = ct_test_trCurrent;
-    ct_test_runner_Log(tr, ct_test_runner_lv_warn, flags, fn, ln);
     if(tr != NULL){
-        ++(tr->score.warn);
+        ++(tr->score.expr);
+        if(!f){
+            ct_test_runner_Log(tr, ct_test_runner_lv_warn, flags, fn, ln);
+            ++(tr->score.warn);
+        }
     }
 }
-void ct_test_tool_Check(
+void ct_test_tool_Check(int f,
     const char* flags, const char* fn, const unsigned long ln)
 {
     ct_test_runner* tr = ct_test_trCurrent;
-    ct_test_runner_Log(tr, ct_test_runner_lv_error, flags, fn, ln);
     if(tr != NULL){
-        ++(tr->score.check);
+        ++(tr->score.expr);
+        if(!f){
+            ct_test_runner_Log(tr, ct_test_runner_lv_error, flags, fn, ln);
+            ++(tr->score.check);
+        }
     }
 }
-void ct_test_tool_Require(
+void ct_test_tool_Require(int f,
     const char* flags, const char* fn, const unsigned long ln)
 {
     ct_test_runner* tr = ct_test_trCurrent;
-    ct_test_runner_Log(tr, ct_test_runner_lv_error, flags, fn, ln);
     if(tr != NULL){
-        ++(tr->score.require);
+        ++(tr->score.expr);
+        if(!f){
+            ct_test_runner_Log(tr, ct_test_runner_lv_error, flags, fn, ln);
+            ++(tr->score.require);
+        }
     }
 }
 void ct_test_tool_Message(
@@ -142,5 +180,8 @@ ct_test_Run(ct_test_runner* tr, const ct_test_suite* suite)
     }
     ct_test_trCurrent = NULL;
 
-    return 0;
+    ct_test_runner_Report(tr, NULL, &(tr->score));
+    return (tr->score.check != 0 && tr->score.require != 0)
+        ? (int)(tr->score.check + tr->score.require)
+        : (tr->score.warn != 0) ? (int)-((int)(tr->score.warn)) : 0;
 }

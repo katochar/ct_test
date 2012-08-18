@@ -25,6 +25,16 @@ typedef enum ct_test_runner_sts_
     ct_test_runner_sts_num_
 } ct_test_runner_sts_;
 
+//! result
+typedef struct ct_test_result
+{
+    unsigned long warn;
+    unsigned long check;
+    unsigned long require;
+    unsigned long expr;
+    unsigned long n;
+} ct_test_result;
+
 //! runner object
 typedef struct ct_test_runner
 {
@@ -35,12 +45,7 @@ typedef struct ct_test_runner
         char* wp;                       /*!< size */
         char* wq;                       /*!< capacity */
     }                   log;
-    struct{
-        unsigned long warn;
-        unsigned long check;
-        unsigned long require;
-        unsigned long n;
-    }                   score;
+    ct_test_result      score;
 } ct_test_runner;
 
 //! build option

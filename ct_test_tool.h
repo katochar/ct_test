@@ -3,24 +3,21 @@
 
 #include "ct_test_cfg.h"
 
-extern void ct_test_tool_Warn(
+extern void ct_test_tool_Warn(int f,
     const char* flags, const char* fn, const unsigned long ln);
-extern void ct_test_tool_Check(
+extern void ct_test_tool_Check(int f,
     const char* flags, const char* fn, const unsigned long ln);
-extern void ct_test_tool_Require(
+extern void ct_test_tool_Require(int f,
     const char* flags, const char* fn, const unsigned long ln);
 extern void ct_test_tool_Message(
     const char* msg, const char* fn, const unsigned long ln);
 
-#define CT_TEST_WARN(F_) ((F_)                                  \
-    ? ((void)(0))                                               \
-    : ct_test_tool_Warn(CT_TEST_I_STZ_(F_), __FILE__, __LINE__))
-#define CT_TEST_CHECK(F_) ((F_)                                  \
-    ? ((void)(0))                                                \
-    : ct_test_tool_Check(CT_TEST_I_STZ_(F_), __FILE__, __LINE__))
-#define CT_TEST_REQUIRE(F_) ((F_)                                  \
-    ? ((void)(0))                                                  \
-    : ct_test_tool_Require(CT_TEST_I_STZ_(F_), __FILE__, __LINE__))
+#define CT_TEST_WARN(F_) \
+    ct_test_tool_Warn((F_), CT_TEST_I_STZ_(F_), __FILE__, __LINE__)
+#define CT_TEST_CHECK(F_) \
+    ct_test_tool_Check((F_), CT_TEST_I_STZ_(F_), __FILE__, __LINE__)
+#define CT_TEST_REQUIRE(F_) \
+    ct_test_tool_Require((F_), CT_TEST_I_STZ_(F_), __FILE__, __LINE__)
 #define CT_TEST_ASSERT(F_) CT_TEST_CHECK(F_)
 #define CT_TEST_MESSAGE(STR_) ct_test_tool_Message(STR_, __FILE__, __LINE__)
 

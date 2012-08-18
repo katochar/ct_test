@@ -31,9 +31,9 @@ typedef struct ct_test_runner
     ct_test_runner_sts_ sts;
     ct_test_runner_lv   lv;
     struct{
-        char*         a;                /*!< begin */
-        unsigned long i;                /*!< size */
-        unsigned long n;                /*!< capacity */
+        char* beg;                      /*!< begin */
+        char* wp;                       /*!< size */
+        char* wq;                       /*!< capacity */
     }                   log;
     struct{
         unsigned long warn;

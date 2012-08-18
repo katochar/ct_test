@@ -1,15 +1,53 @@
-#include <stdlib.h>
-#include <stdio.h>
 #include "ct_test.h"
 
-ct_test_suite ct_test_suiteRoot = {NULL};
+#define a_sizeof(A_) (sizeof(A_) / sizeof((A_)[0]))
 
+ct_test_suite ct_test_suiteRoot = {NULL};
+static ct_test_runner* ct_test_trCurrent = NULL;
+
+//! output log
+static ct_test_runner*
+ct_test_runner_Log(ct_test_runner* tr, ct_test_runner_lv lv,
+    const char* msg, const char* fn, unsigned long ln)
+{
+    if(tr == NULL || tr->log.wp == NULL) return tr;
+    if(lv >= tr->lv){
+        static const char* const subject[ct_test_runner_lv_num] = {
+            "[info] ",                  // ct_test_runner_lv_info
+            "[warning] ",               // ct_test_runner_lv_warn
+            "[error] ",                 // ct_test_runner_lv_error
+        };
+        char*             wp  = tr->log.wp;
+        const char* const wq  = tr->log.wq;
+        const char* const beg = wp;
+        if(lv < a_sizeof(subject)){
+            wp = ct_test_i_StrLCpy(wp, wq, subject[lv]);
+        }
+        if(fn != NULL){
+            wp = ct_test_i_StrLCpy(wp, wq, fn);
+            wp = ct_test_i_StrLCpy(wp, wq, "(");
+            wp = ct_test_i_FormatDec(wp, wq, ln);
+            wp = ct_test_i_StrLCpy(wp, wq, ") ");
+        }
+        if(msg != NULL && *msg != '\0'){
+            wp = ct_test_i_StrLCpy(wp, wq, msg);
+        }
+        if(wp != beg){
+            wp = ct_test_i_StrLCpy(wp, wq, CT_TEST_CFG_EOL);
+        }
+        tr->log.wp = wp;
+    }
+    return tr;
+}
 /*! initialize dynamic data */
 static ct_test_runner*
 ct_test_runner_Clear(ct_test_runner* tr)
 {
     tr->sts = ct_test_runner_sts_suspend_;
-    tr->log.i = 0;
+    tr->log.wp = tr->log.beg;
+    if(tr->log.wp != NULL && tr->log.wp != tr->log.wq){
+        *(tr->log.wp) = '\0';
+    }
     tr->score.n       = 0;
     tr->score.warn    = 0;
     tr->score.check   = 0;
@@ -23,18 +61,54 @@ ct_test_runner_Build(ct_test_runner* tr,
     const ct_test_runner_opt* opt)
 {
 #if defined(NULL)
-    static void* const nil = ((void*)(NULL));
+    static void* const NIL = ((void*)(NULL));
 #else
-    static void* const nil = ((void*)(0));
+    static void* const NIL = ((void*)(0));
 #endif
-    if(tr != nil){
-        tr->lv  = (opt != nil) ? opt->lv : ct_test_runner_lv_warn;
-        tr->log.a = (buf != nil && bufn != 0) ? ((char*)(buf)) : nil;
-        tr->log.n = (buf != nil && bufn != 0) ? bufn : 0;
+    if(tr != NIL){
+        tr->lv  = (opt != NIL) ? opt->lv : ct_test_runner_lv_warn;
+        tr->log.wp  = (buf!=NIL && bufn!=0) ? ((char*)(buf)) : NIL;
+        tr->log.wq  = (buf!=NIL && bufn!=0) ? tr->log.wp + bufn : tr->log.wp;
+        tr->log.beg = tr->log.wp;
         ct_test_runner_Clear(tr);
     }
     return tr;
 }
+
+void ct_test_tool_Warn(
+    const char* flags, const char* fn, const unsigned long ln)
+{
+    ct_test_runner* tr = ct_test_trCurrent;
+    ct_test_runner_Log(tr, ct_test_runner_lv_warn, flags, fn, ln);
+    if(tr != NULL){
+        ++(tr->score.warn);
+    }
+}
+void ct_test_tool_Check(
+    const char* flags, const char* fn, const unsigned long ln)
+{
+    ct_test_runner* tr = ct_test_trCurrent;
+    ct_test_runner_Log(tr, ct_test_runner_lv_error, flags, fn, ln);
+    if(tr != NULL){
+        ++(tr->score.check);
+    }
+}
+void ct_test_tool_Require(
+    const char* flags, const char* fn, const unsigned long ln)
+{
+    ct_test_runner* tr = ct_test_trCurrent;
+    ct_test_runner_Log(tr, ct_test_runner_lv_error, flags, fn, ln);
+    if(tr != NULL){
+        ++(tr->score.require);
+    }
+}
+void ct_test_tool_Message(
+    const char* msg, const char* fn, const unsigned long ln)
+{
+    ct_test_runner* tr = ct_test_trCurrent;
+    ct_test_runner_Log(tr, ct_test_runner_lv_info, msg, fn, ln);
+}
+
 
 /* push front */
 ct_test_suite*
@@ -51,22 +125,22 @@ ct_test_suite_Join(ct_test_suite* suite, ct_test_case* test)
 int
 ct_test_Run(ct_test_runner* tr, const ct_test_suite* suite)
 {
-    const ct_test_case* ii = suite->root;
-    int ntc = 0;
+    const ct_test_case* ii;
 
-    while(ii != NULL){
+    if(tr == NULL || suite == NULL) return 0;
+
+    ct_test_trCurrent = tr;
+    for(ii = suite->root; ii != NULL; ii = ii->list_.next_){
         const ct_test_case_impl_* const tc = ii->impl_;
         if(tc != NULL && tc->entry != NULL){
-            printf("%s(%d):%s\n",
-                (tc->fn != NULL) ? tc->fn : "",
-                tc->ln,
-                (tc->name != NULL) ? tc->name : "");
+            ct_test_runner_Log(tr, ct_test_runner_lv_info,
+                (tc->name != NULL) ? tc->name : "",
+                tc->fn, tc->ln);
             tc->entry();
-            ++ntc;
+            ++(tr->score.n);
         }
-        ii = ii->list_.next_;
     }
+    ct_test_trCurrent = NULL;
 
-    printf("%d test.\n", ntc);
     return 0;
 }

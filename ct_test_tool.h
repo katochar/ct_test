@@ -1,3 +1,16 @@
+/*---------------------------------------------------------------------------*/
+/*! @file ct_test_tool.h
+
+    @brief
+        test tools.
+
+    @author
+        katochar
+
+    @version
+        - 2012.08.18 katochar 1st
+
+*//*-------------------------------------------------------------------------*/
 #ifndef CT_TEST_TOOL_H
 #define CT_TEST_TOOL_H
 

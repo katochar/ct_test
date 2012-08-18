@@ -1,3 +1,16 @@
+/*---------------------------------------------------------------------------*/
+/*! @file ct_test_case_.h
+
+    @brief
+        test-case as one execution unit.
+
+    @author
+        katochar
+
+    @version
+        - 2012.08.18 katochar 1st
+
+*//*-------------------------------------------------------------------------*/
 #ifndef CT_TEST_CASE_H
 #define CT_TEST_CASE_H
 
@@ -22,7 +35,7 @@ typedef struct ct_test_case
 } ct_test_case;
 
 //! create testcase
-#define CT_TEST_CASE_GENERATOR(NAME_)                                \
+#define CT_TEST_CASE_GENERATOR(NAME_)                               \
     static void CT_TEST_I_TEST_NMZ(NAME_)(void);                    \
     static ct_test_case_impl_ const CT_TEST_I_IMPL_NMZ(NAME_) = {   \
         __FILE__, __LINE__,                                         \

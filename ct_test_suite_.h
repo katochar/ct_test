@@ -1,3 +1,16 @@
+/*---------------------------------------------------------------------------*/
+/*! @file ct_test_suite_.h
+
+    @brief
+        ct_test suite.
+
+    @author
+        katochar
+
+    @version
+        - 2012.08.18 katochar 1st
+
+*//*-------------------------------------------------------------------------*/
 #ifndef CT_TEST_SUITE_H
 #define CT_TEST_SUITE_H
 

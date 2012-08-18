@@ -39,7 +39,7 @@ CT_TEST_CASE_BLOCK_END()
 static ct_test_runner_opt*
 parse_opt(ct_test_runner_opt* opt, int argc, char* argv[])
 {
-    opt->lv = ct_test_runner_lv_info;
+    opt->lv = CT_TEST_RUNNER_LV_VERBOSE;
 }
 
 #include <stdio.h>

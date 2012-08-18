@@ -1,3 +1,16 @@
+/*---------------------------------------------------------------------------*/
+/*! @file ct_test_runner_.h
+
+    @brief
+        ct_test runnner.
+
+    @author
+        katochar
+
+    @version
+        - 2012.08.18 katochar 1st
+
+*//*-------------------------------------------------------------------------*/
 #ifndef CT_TEST_RUNNER_H
 #define CT_TEST_RUNNER_H
 
@@ -19,6 +32,7 @@ typedef enum ct_test_runner_lv
 typedef enum ct_test_runner_sts_
 {
     ct_test_runner_sts_suspend_,
+    ct_test_runner_sts_ready_,
     ct_test_runner_sts_run_,
     ct_test_runner_sts_finish_,
 
@@ -31,8 +45,8 @@ typedef struct ct_test_result
     unsigned long warn;
     unsigned long check;
     unsigned long require;
-    unsigned long expr;
-    unsigned long n;
+    unsigned long expr;                 /*!< num of checker */
+    unsigned long n;                    /*!< num of testcase */
 } ct_test_result;
 
 //! runner object

@@ -1,3 +1,19 @@
+/*---------------------------------------------------------------------------*/
+/*! @file ct_test_cfg.h
+
+    @brief
+        ct_test module whole configuration.
+
+    @author
+        katochar
+
+    @note
+        as necessary, modify this file.
+
+    @version
+        - 2012.08.18 katochar 1st
+
+*//*-------------------------------------------------------------------------*/
 #ifndef CT_TEST_CFG_H
 #define CT_TEST_CFG_H
 

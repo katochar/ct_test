@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "ct_test.h"
 
 CT_TEST_CASE_BLOCK_BEGIN()
@@ -28,9 +29,15 @@ CT_TEST_CASE_I(sample)
 
 CT_TEST_CASE_BLOCK_END()
 
+static ct_test_runner_opt* parse_opt(ct_test_runner_opt* opt,
+    const int argc, const char* const argv[])
+{
+    opt->lv = ct_test_runner_lv_warn;
+}
+
 int main(int argc, char* argv[])
 {
-    CT_TEST_SUITE_JOIN();
-    CT_TEST_SUITE_JOIN_I(sample);
-    return CT_TEST_SUITE_RUN(argc, argv);
+    CT_TEST_JOIN();
+    CT_TEST_JOIN_I(sample);
+    return CT_TEST_RUN(NULL);
 }

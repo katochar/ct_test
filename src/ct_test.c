@@ -98,9 +98,11 @@ ct_test_runner_Clear(ct_test_runner* tr)
         *(tr->log.wp) = '\0';
     }
     tr->score.n       = 0;
+    tr->score.expr    = 0;
     tr->score.warn    = 0;
     tr->score.check   = 0;
     tr->score.require = 0;
+    return tr;
 }
 
 /*! initialize and setup log */
